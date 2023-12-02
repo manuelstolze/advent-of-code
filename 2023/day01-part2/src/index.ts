@@ -1,7 +1,10 @@
 import input from './input';
 import firstNumber from './getFirstNumber';
 import lastNumber from './getLastNumber'
+
 const lines = input.split(/\n/g);
+
+
 
 console.log(
 lines
