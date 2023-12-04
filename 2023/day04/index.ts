@@ -1,5 +1,5 @@
-import inputFile from "./input";
-import { Card } from "./Card";
+import inputFile from "./src/input";
+import { Card } from "./src/Card";
 import { counting } from "radash";
 
 function parseFile() {
