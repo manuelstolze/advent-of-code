@@ -2,6 +2,7 @@
   "name": "adventofcode",
   "version": "1.0.0",
   "description": "",
+  "prettier": "manuelstolze-prettier-config",
   "main": "index.js",
   "scripts": {
     "start": "nodemon src/index.ts",
@@ -10,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "manuelstolze-prettier-config": "^1.0.0",
     "@jest/globals": "^29.7.0",
     "@types/jest": "^29.5.10",
     "@types/node": "^20.10.1",
