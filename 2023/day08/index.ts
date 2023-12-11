@@ -1,5 +1,5 @@
 import example from "./src/example";
-import { Node, NodeSet } from "./src/Node";
+import { NodeSet, NodeSet } from "./src/NodeSet";
 import example2 from "./src/example2";
 import input from "./src/input";
 
@@ -16,7 +16,7 @@ function readInstructionsAndNodes(content: string): [Array<string>, NodeSet] {
       .replace(/\s{2}/, " ")
       .split(" ");
 
-    return Node.fromArray(nodeData);
+    return NodeSet.fromArray(nodeData);
   });
 
   return [instructions, new NodeSet(nodes)];
@@ -25,13 +25,13 @@ function readInstructionsAndNodes(content: string): [Array<string>, NodeSet] {
 function executeInstructions(
   instructions: Array<string>,
   nodeSet: NodeSet,
-  currentNode: Node,
+  currentNode: NodeSet,
   counter: number
 ) {
-  let nextNode: Node;
+  let nextNode: NodeSet;
 
   instructions.map((identifier: string) => {
-    currentNode = nodeSet.getNodeByIdentifier(currentNode.identifier) as Node;
+    currentNode = nodeSet.getNodeByIdentifier(currentNode.identifier) as NodeSet;
     nextNode =
       identifier === "L"
         ? nodeSet.getNodeByIdentifier(currentNode.leftNode)
