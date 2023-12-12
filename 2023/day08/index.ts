@@ -1,71 +1,53 @@
 import example from "./src/example";
-import { NodeSet, NodeSet } from "./src/NodeSet";
 import example2 from "./src/example2";
 import input from "./src/input";
+import { Tree, TreeNode } from "./src/Tree";
+import { leastCommonMultiple } from "../util/number";
 
-const IDENTIFIER_START = "AAA";
-const IDENTIFIER_END = "ZZZ";
+const readInstructionsAndNodes = (content: string) => {
+  const [rawInstructions, rawNodes] = content.split("\n\n");
+  const nodesInfo = rawNodes
+    .split("\n")
+    .map((line) => [...line.matchAll(/([A-Z0-9]{3})/g)].map((match) => match[1]));
 
-function readInstructionsAndNodes(content: string): [Array<string>, NodeSet] {
-  const [rawInstructions, rawNodeSet] = content.split("\n\n");
-  const instructions = rawInstructions.split("");
+  const nodes = nodesInfo.map((nodeInfo) => new TreeNode(nodeInfo[0]));
 
-  const nodes = rawNodeSet.split("\n").map((line) => {
-    const nodeData = line
-      .replace(/[=(,)]/g, "")
-      .replace(/\s{2}/, " ")
-      .split(" ");
-
-    return NodeSet.fromArray(nodeData);
+  nodes.forEach((node, index) => {
+    node.left = nodes.find((n) => n.data === nodesInfo[index][1]);
+    node.right = nodes.find((n) => n.data === nodesInfo[index][2]);
   });
 
-  return [instructions, new NodeSet(nodes)];
-}
+  const tree = new Tree(nodes.find((node) => node.data === "AAA"));
 
-function executeInstructions(
-  instructions: Array<string>,
-  nodeSet: NodeSet,
-  currentNode: NodeSet,
-  counter: number
-) {
-  let nextNode: NodeSet;
+  return {
+    instructions: rawInstructions.split("") as ReadonlyArray<"L" | "R">,
+    nodes,
+    tree
+  };
+};
 
-  instructions.map((identifier: string) => {
-    currentNode = nodeSet.getNodeByIdentifier(currentNode.identifier) as NodeSet;
-    nextNode =
-      identifier === "L"
-        ? nodeSet.getNodeByIdentifier(currentNode.leftNode)
-        : nodeSet.getNodeByIdentifier(currentNode.rightNode);
+const part1 = (content: string) => {
+  const { instructions, tree } = readInstructionsAndNodes(content);
 
-    currentNode = nextNode;
-    counter++;
-  });
+  return tree.traverse(instructions, tree.root, (node) => node.data === "ZZZ");
+};
 
-  return { newCurrentNode: currentNode, newCounter: counter };
-}
+const part2 = (content: string) => {
+  const { instructions, nodes, tree } = readInstructionsAndNodes(content);
 
-function part1(content: string) {
-  const [instructions, nodeSet] = readInstructionsAndNodes(content);
+  const cycles = nodes
+    .filter((node) => node.data.endsWith("A"))
+    .map((node) => {
+      return tree.traverse(instructions, node, (node) => node.data.endsWith("Z"));
+    });
 
-  const start = nodeSet.getNodeByIdentifier(IDENTIFIER_START);
-  const end = IDENTIFIER_END;
-
-  let counter = 0;
-  let currentNode = start;
-
-  while (currentNode.identifier !== end) {
-    let { newCurrentNode, newCounter } = executeInstructions(
-      instructions,
-      nodeSet,
-      currentNode,
-      counter
-    );
-    currentNode = newCurrentNode;
-    counter = newCounter;
-  }
-  return counter;
-}
+  return leastCommonMultiple(cycles);
+};
 
 console.log("Example - Part 1", part1(example));
 console.log("Example 2 - Part 1", part1(example2));
 console.log("Input - Part 1", part1(input));
+
+console.log("Example - Part 1", part2(example));
+console.log("Example 2 - Part 1", part2(example2));
+console.log("Input - Part 1", part2(input));
