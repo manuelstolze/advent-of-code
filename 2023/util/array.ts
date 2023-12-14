@@ -10,4 +10,8 @@ function* cycle<T>(array: ReadonlyArray<T>): Generator<T, void, undefined> {
   }
 }
 
-export { intersection, cycle };
+function sum(arr: number[]): number {
+  return arr.reduce((a, b) => a + b, 0);
+}
+
+export { intersection, cycle, sum };
