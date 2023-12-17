@@ -1,10 +1,3 @@
-import {of} from "ramda";
-
-interface ReflectionLine {
-    index: number,
-    isVertical: boolean
-}
-
 type ReflectionLineOfType = {
     index: number,
     diffsCount: number

@@ -1,6 +1,5 @@
 import {readFileSync} from "node:fs";
 import {Pattern} from "./src/Pattern";
-import * as util from "util";
 
 
 type PatternArray = string[][];
